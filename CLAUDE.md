@@ -81,8 +81,35 @@ Covers foundation pricing, roof uplifts, guttering, rate overrides, and service 
 
 ## Known issues / things still to fix
 - Window placement positions (left/right wall) need visual verification
-- Roof finish prices for some window styles are placeholder figures — need confirmation from employer
 - Not fully mobile responsive (basic touch/scroll works, but layout is desktop-first)
+
+## Employer confirmations needed (TODOs in pricing.js)
+The following catalogue items were deduplicated but their correct size brackets or rates
+need sign-off before the `_v2`/`_v3` suffixes can be replaced with meaningful names:
+- `bathroom` (£3000 full suite) vs `bathroom_v2` (£80 — unclear what this represents)
+- `electric_shower` (£160 standard) vs `electric_shower_v2` (£180 premium)
+- `sliding_4_part_door` (£5200) vs `sliding_4_part_door_v2` (£4000)
+- `stacker_door` (£3100) vs `stacker_door_v2` (£3500)
+- `roof_window` / `roof_window_v2` / `roof_window_v3` (£1800 / £2000 / £2500 — Small/Medium/Large assumed)
+- `awning_window` / `_v2` / `_v3` (£300 / £500 / £800)
+- `awning_vertical_window` / `_v2` (£507 / £800)
+- `fixed_window` / `_v2` / `_v3` (£900 / £300 / £500)
+- `tilt_n_turn_window` / `_v2` (£250 / £350)
+- Window style price uplifts (Long Panel +£200, Narrow Vertical/Horizontal +£150) are placeholder figures
+
+## Recent fixes (v6.1 session)
+- **`setActivePalette` double-definition** — the empty stub in `ui.js` was shadowing the real
+  implementation in `scene.js`, silently breaking door/window placement. Stub removed.
+- **`makeRoofMat()` no-args call** — veranda roof panel now passes correct panel dimensions.
+- **Camera debug overlay** — `#camDebug` element, CSS rule, and JS write all removed.
+- **Stale GLB injection** — added `_buildGen` counter; async GLB callbacks bail out if their
+  build generation no longer matches, preventing models from a previous build appearing in
+  a freshly rebuilt scene when sliders are dragged quickly.
+- **Catalogue duplicates** — 16 duplicate keys reduced to 0. Exact-same-rate dupes deleted;
+  different-rate dupes suffixed `_v2`/`_v3` with TODO comments for employer confirmation.
+- **Roof window HTML bug** — three qty items all shared `id="qty-roof_window"` and wrote to
+  the same state key; now use distinct keys `roof_window` / `roof_window_v2` / `roof_window_v3`
+  with matching state entries and labels (Small / Medium / Large).
 
 ## Architecture decisions
 - No framework, no build step — plain HTML/JS/CSS so non-developers can open and edit it easily

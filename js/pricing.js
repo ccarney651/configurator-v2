@@ -13,17 +13,19 @@ const CATALOGUE = {
   bathroom: {
     fixtures: [
       { key: 'large_vanity', label: 'Large Vanity', rate: 160, unit: 'Each' },
-      { key: 'bathroom', label: 'Bathroom', rate: 3000, unit: 'Each' },
+      { key: 'bathroom', label: 'Bathroom (Full Suite)', rate: 3000, unit: 'Each' },
       { key: 'combined_vanity', label: 'Combined Vanity', rate: 220, unit: 'Each' },
       { key: 'shower_room', label: 'Shower Room', rate: 3000, unit: 'Each' },
       { key: 'mid_vanity', label: 'Mid Vanity', rate: 140, unit: 'Each' },
       { key: 'small_vanity', label: 'Small Vanity', rate: 120, unit: 'Each' },
       { key: 'basin_pedestal', label: 'Basin Pedestal', rate: 250, unit: 'Each' },
-      { key: 'electric_shower', label: 'Electric Shower', rate: 160, unit: 'Each' },
+      { key: 'electric_shower', label: 'Electric Shower (Standard)', rate: 160, unit: 'Each' },
       { key: 'toilet', label: 'Toilet', rate: 140, unit: 'Each' },
       { key: 'toilet_vanity', label: 'Toilet Vanity', rate: 180, unit: 'Each' },
-      { key: 'bathroom', label: 'Bathroom', rate: 80, unit: 'Each' },
-      { key: 'electric_shower', label: 'Electric Shower', rate: 180, unit: 'Each' },
+      // TODO: confirm with employer what this £80 'Bathroom' entry represents — key renamed to avoid shadowing the £3000 entry above
+      { key: 'bathroom_v2', label: 'Bathroom (Additional)', rate: 80, unit: 'Each' },
+      // TODO: confirm with employer which electric shower rate is correct (£160 vs £180)
+      { key: 'electric_shower_v2', label: 'Electric Shower (Premium)', rate: 180, unit: 'Each' },
       { key: 'towel_rail', label: 'Towel Rail', rate: 150, unit: 'Each' },
       { key: 'shower_tray', label: 'Shower Tray', rate: 103, unit: 'Each' },
       { key: 'cloakroom', label: 'Cloakroom', rate: 1500, unit: 'Each' },
@@ -323,7 +325,6 @@ const CATALOGUE = {
   decking: {
     inbuilt: [
       { key: 'inbuilt_decking_natural_wood_grain_finish', label: 'Inbuilt Decking, Natural Wood Grain Finish', rate: 220, unit: 'M2' },
-      { key: 'inbuilt_decking_natural_wood_grain_finish', label: 'Inbuilt Decking, Natural Wood Grain Finish', rate: 220, unit: 'M2' },
       { key: 'inbuilt_decking_hardwood_finish', label: 'Inbuilt Decking, Hardwood Finish', rate: 250, unit: 'M2' },
       { key: 'inbuilt_decking_pewter_wood_grain_finish', label: 'Inbuilt Decking, Pewter Wood Grain Finish', rate: 220, unit: 'M2' },
       { key: 'inbuilt_decking_fawn_wood_grain_finish', label: 'Inbuilt Decking, Fawn Wood Grain Finish', rate: 220, unit: 'M2' },
@@ -376,8 +377,10 @@ const CATALOGUE = {
       { key: 'sliding_2_part_door', label: 'Sliding 2-Part Door(w) x(h) (mm)', rate: 3000, unit: 'Each' },
       { key: 'stacker_door', label: 'Stacker Door(w) x(h) (mm)', rate: 3100, unit: 'Each' },
       { key: 'sliding_4_part_door', label: 'Sliding 4-Part Door(w) x(h) (mm)', rate: 5200, unit: 'Each' },
-      { key: 'sliding_4_part_door', label: 'Sliding 4-Part Door(w) x(h) (mm)', rate: 4000, unit: 'Each' },
-      { key: 'stacker_door', label: 'Stacker Door(w) x(h) (mm)', rate: 3500, unit: 'Each' },
+      // TODO: confirm with employer which sliding_4_part_door rate is correct (£5200 vs £4000) — may be different sizes
+      { key: 'sliding_4_part_door_v2', label: 'Sliding 4-Part Door — Alt (w) x(h) (mm)', rate: 4000, unit: 'Each' },
+      // TODO: confirm with employer which stacker_door rate is correct (£3100 vs £3500)
+      { key: 'stacker_door_v2', label: 'Stacker Door — Alt (w) x(h) (mm)', rate: 3500, unit: 'Each' },
       { key: 'sliding_3_part_door', label: 'Sliding 3-Part Door(w) x(h) (mm)', rate: 3800, unit: 'Each' },
     ],
     standard: [
@@ -514,7 +517,6 @@ const CATALOGUE = {
       { key: 'blow_heater', label: 'Blow Heater', rate: 180, unit: 'Each' },
       { key: 'climate_control', label: 'Climate control', rate: 850, unit: 'Each' },
       { key: 'wall_heater', label: 'Wall Heater', rate: 800, unit: 'Each' },
-      { key: 'climate_control', label: 'Climate control', rate: 850, unit: 'Each' },
       { key: 'underfloor_heating', label: 'Underfloor Heating', rate: 90, unit: 'Length Metres' },
     ],
   },
@@ -522,7 +524,6 @@ const CATALOGUE = {
     walls: [
       { key: 'plywood_finished_walls', label: 'Plywood Finished Walls', rate: 100, unit: 'M2' },
       { key: 'light_yellow_finished_walls', label: 'Light Yellow Finished Walls', rate: 100, unit: 'M2' },
-      { key: 'melamine_boards_finished_walls', label: 'Melamine Boards Finished Walls', rate: 100, unit: 'M2' },
       { key: 'melamine_boards_finished_walls', label: 'Melamine Boards Finished Walls', rate: 100, unit: 'M2' },
       { key: 'studs_membrane_finished_walls', label: 'Studs & Membrane Finished Walls', rate: 100, unit: 'M2' },
       { key: 'oak_panels_finished_walls', label: 'Oak Panels Finished Walls', rate: 100, unit: 'M2' },
@@ -533,7 +534,6 @@ const CATALOGUE = {
       { key: 'charcoal_grey_finished_walls', label: 'Charcoal Grey Finished Walls', rate: 100, unit: 'M2' },
       { key: 'studs_insulation_finished_walls', label: 'Studs & Insulation Finished Walls', rate: 100, unit: 'M2' },
       { key: 'white_finished_walls', label: 'White Finished Walls', rate: 100, unit: 'M2' },
-      { key: 'light_blue_finished_walls', label: 'Light Blue Finished Walls', rate: 100, unit: 'M2' },
       { key: 'alder_wood_finished_walls', label: 'Alder Wood Finished Walls', rate: 100, unit: 'M2' },
     ],
   },
@@ -550,9 +550,10 @@ const CATALOGUE = {
   },
   roof_porch: {
     rooflights: [
-      { key: 'roof_window', label: 'Roof Window(w) x(h) (mm)', rate: 1800, unit: 'Each' },
-      { key: 'roof_window', label: 'Roof Window(w) x(h) (mm)', rate: 2000, unit: 'Each' },
-      { key: 'roof_window', label: 'Roof Window(w) x(h) (mm)', rate: 2500, unit: 'Each' },
+      // TODO: confirm with employer exact size brackets for these three roof window tiers
+      { key: 'roof_window',    label: 'Roof Window — Small (w) x(h) (mm)',  rate: 1800, unit: 'Each' },
+      { key: 'roof_window_v2', label: 'Roof Window — Medium (w) x(h) (mm)', rate: 2000, unit: 'Each' },
+      { key: 'roof_window_v3', label: 'Roof Window — Large (w) x(h) (mm)',  rate: 2500, unit: 'Each' },
     ],
     structures: [
       { key: 'pergola', label: 'Pergola', rate: 4000, unit: 'Each' },
@@ -598,11 +599,13 @@ const CATALOGUE = {
   },
   windows: {
     awning: [
-      { key: 'awning_window', label: 'Awning Window(w) x(h) (mm)', rate: 300, unit: 'Each' },
-      { key: 'awning_window', label: 'Awning Window(w) x(h) (mm)', rate: 800, unit: 'Each' },
-      { key: 'awning_vertical_window', label: 'Awning Vertical Window(w) x(h) (mm)', rate: 507, unit: 'Each' },
-      { key: 'awning_vertical_window', label: 'Awning Vertical Window(w) x(h) (mm)', rate: 800, unit: 'Each' },
-      { key: 'awning_window', label: 'Awning Window(w) x(h) (mm)', rate: 500, unit: 'Each' },
+      // TODO: confirm with employer size brackets for these three awning window tiers
+      { key: 'awning_window',    label: 'Awning Window — Small (w) x(h) (mm)',  rate: 300, unit: 'Each' },
+      { key: 'awning_window_v2', label: 'Awning Window — Medium (w) x(h) (mm)', rate: 500, unit: 'Each' },
+      { key: 'awning_window_v3', label: 'Awning Window — Large (w) x(h) (mm)',  rate: 800, unit: 'Each' },
+      // TODO: confirm with employer size brackets for these two awning vertical window tiers
+      { key: 'awning_vertical_window',    label: 'Awning Vertical Window — Standard (w) x(h) (mm)', rate: 507, unit: 'Each' },
+      { key: 'awning_vertical_window_v2', label: 'Awning Vertical Window — Large (w) x(h) (mm)',    rate: 800, unit: 'Each' },
       { key: 'double_awning_window', label: 'Double Awning Window(w) x(h) (mm)', rate: 1500, unit: 'Each' },
     ],
     bathroom: [
@@ -611,9 +614,10 @@ const CATALOGUE = {
     fixed: [
       { key: 'georgian_10_pane_fixed_window', label: 'Georgian 10 Pane Fixed Window(w) x(h) (mm)', rate: 1000, unit: 'Each' },
       { key: 'glass_window', label: 'Glass Window(w) x(h) (mm)', rate: 1000, unit: 'Each' },
-      { key: 'fixed_window', label: 'Fixed Window(w) x(h) (mm)', rate: 900, unit: 'Each' },
-      { key: 'fixed_window', label: 'Fixed Window(w) x(h) (mm)', rate: 300, unit: 'Each' },
-      { key: 'fixed_window', label: 'Fixed Window(w) x(h) (mm)', rate: 500, unit: 'Each' },
+      // TODO: confirm with employer size brackets for these three fixed window tiers
+      { key: 'fixed_window',    label: 'Fixed Window — Large (w) x(h) (mm)',  rate: 900, unit: 'Each' },
+      { key: 'fixed_window_v2', label: 'Fixed Window — Small (w) x(h) (mm)',  rate: 300, unit: 'Each' },
+      { key: 'fixed_window_v3', label: 'Fixed Window — Medium (w) x(h) (mm)', rate: 500, unit: 'Each' },
       { key: 'top_open_fixed_window', label: 'Top Open Fixed Window(w) x(h) (mm)', rate: 700, unit: 'Each' },
     ],
     gable: [
@@ -649,8 +653,9 @@ const CATALOGUE = {
     ],
     tilt_turn: [
       { key: 'tilt_n_turn_top_window', label: 'Tilt\'n\'turn Top Window(w) x(h) (mm)', rate: 250, unit: 'Each' },
-      { key: 'tilt_n_turn_window', label: 'Tilt\'n\'turn Window(w) x(h) (mm)', rate: 250, unit: 'Each' },
-      { key: 'tilt_n_turn_window', label: 'Tilt\'n\'turn Window(w) x(h) (mm)', rate: 350, unit: 'Each' },
+      // TODO: confirm with employer size brackets for these two tilt & turn tiers
+      { key: 'tilt_n_turn_window',    label: 'Tilt\'n\'turn Window — Standard (w) x(h) (mm)', rate: 250, unit: 'Each' },
+      { key: 'tilt_n_turn_window_v2', label: 'Tilt\'n\'turn Window — Large (w) x(h) (mm)',    rate: 350, unit: 'Each' },
     ],
   },
 };
@@ -659,8 +664,15 @@ const CATALOGUE = {
 // Admin panel can save per-item rate overrides to localStorage.
 // Guard for Node.js test environment where localStorage is not available.
 const _ls = typeof localStorage !== 'undefined' ? localStorage : { getItem: () => null };
-const PRICING_OVERRIDES = JSON.parse(_ls.getItem('gardenroom_pricing') || '{}');
-const DISABLED_ITEMS    = JSON.parse(_ls.getItem('gardenroom_disabled') || '{}');
+
+// Read overrides dynamically so admin changes take effect as soon as the
+// customer next triggers a price calculation (no page reload required).
+function _getPricingOverrides() { return JSON.parse(_ls.getItem('gardenroom_pricing') || '{}'); }
+function _getDisabledItems()    { return JSON.parse(_ls.getItem('gardenroom_disabled') || '{}'); }
+
+// Keep a module-level snapshot for callers that need a stable reference
+// (e.g. applyAdminDisabledItems runs once on page load).
+const DISABLED_ITEMS = _getDisabledItems();
 
 // Load custom items added via admin panel
 (function loadCustomItems() {
@@ -674,10 +686,11 @@ const DISABLED_ITEMS    = JSON.parse(_ls.getItem('gardenroom_disabled') || '{}')
   });
 })();
 
-function isItemEnabled(key) { return !DISABLED_ITEMS[key]; }
+function isItemEnabled(key) { return !_getDisabledItems()[key]; }
 
 function getRate(key) {
-  if (PRICING_OVERRIDES[key] !== undefined) return PRICING_OVERRIDES[key];
+  const overrides = _getPricingOverrides();
+  if (overrides[key] !== undefined) return overrides[key];
   for (const cat of Object.values(CATALOGUE)) {
     for (const sub of Object.values(cat)) {
       const found = sub.find(i => i.key === key);
@@ -691,11 +704,12 @@ function getRate(key) {
 // Returns a copy with the admin-overridden rate applied, so all
 // callers that use item.rate automatically get the admin price.
 function getItem(key) {
+  const overrides = _getPricingOverrides();
   for (const cat of Object.values(CATALOGUE)) {
     for (const sub of Object.values(cat)) {
       const found = sub.find(i => i.key === key);
       if (found) {
-        const rate = PRICING_OVERRIDES[key] !== undefined ? PRICING_OVERRIDES[key] : found.rate;
+        const rate = overrides[key] !== undefined ? overrides[key] : found.rate;
         return Object.assign({}, found, { rate });
       }
     }
@@ -895,7 +909,8 @@ if (typeof window !== 'undefined') {
 // without running in a browser context.
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
-    CATALOGUE, PRICING_OVERRIDES, DISABLED_ITEMS, FOUNDATION, ROOF_STYLE_UPLIFT,
+    CATALOGUE, DISABLED_ITEMS, FOUNDATION, ROOF_STYLE_UPLIFT,
+    getPricingOverrides: _getPricingOverrides,
     calcFoundation, calcAreaItem, calcEachItem, calcTotal,
     getRate, getItem, isItemEnabled, auditCatalogue,
   };

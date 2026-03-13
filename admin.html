@@ -65,7 +65,30 @@
 </head>
 <body>
 
-<div id="adminPanel">
+<div id="adminGate" style="
+  position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+  background:#f5f0eb; z-index:9999; font-family:inherit;
+">
+  <div style="background:#fff; border-radius:12px; box-shadow:0 4px 24px rgba(0,0,0,0.12);
+              padding:40px 48px; max-width:360px; width:90%; text-align:center;">
+    <h2 style="margin:0 0 6px; font-size:20px; color:#1a1a1a;">Admin Panel</h2>
+    <p style="margin:0 0 24px; color:#666; font-size:14px;">Enter the admin password to continue.</p>
+    <input id="gateInput" type="password" placeholder="Password"
+      style="width:100%; box-sizing:border-box; padding:10px 14px; border:1.5px solid #ddd;
+             border-radius:8px; font-size:15px; font-family:inherit; outline:none; margin-bottom:12px;"
+      onkeydown="if(event.key==='Enter') checkPassword()">
+    <div id="gateError" style="display:none; color:#c0392b; font-size:13px; margin-bottom:10px;">
+      Incorrect password.
+    </div>
+    <button onclick="checkPassword()"
+      style="width:100%; background:#3a6647; color:#fff; border:none; border-radius:8px;
+             padding:11px; font-size:15px; font-family:inherit; font-weight:600; cursor:pointer;">
+      Enter
+    </button>
+  </div>
+</div>
+
+<div id="adminPanel" style="display:none;">
   <div class="admin-header">
     <h1>Pricing Admin Panel</h1>
     <div class="admin-header-actions">
@@ -161,19 +184,27 @@ let rateOverrides = JSON.parse(localStorage.getItem('gardenroom_pricing') || '{}
 
 // ─── Auth ───────────────────────────────────────────────────────────────────
 function checkPassword() {
-  if (false) {
+  const input = document.getElementById('gateInput');
+  if (input.value === ADMIN_PASSWORD) {
     sessionStorage.setItem('pricing_admin_auth', '1');
     showPanel();
   } else {
     const err = document.getElementById('gateError');
     err.style.display = 'block';
+    input.value = '';
+    input.focus();
     setTimeout(() => err.style.display = 'none', 3000);
   }
 }
 function showPanel() {
+  document.getElementById('adminGate').style.display = 'none';
+  document.getElementById('adminPanel').style.display = '';
   buildForm();
 }
-showPanel();
+// Auto-unlock if already authenticated in this browser session
+if (sessionStorage.getItem('pricing_admin_auth') === '1') {
+  showPanel();
+}
 
 // ─── Build form ─────────────────────────────────────────────────────────────
 function buildForm() {
@@ -327,7 +358,7 @@ function savePricing() {
   localStorage.setItem('gardenroom_pricing', JSON.stringify(newOverrides));
   localStorage.setItem('gardenroom_disabled', JSON.stringify(disabledItems));
   rateOverrides = newOverrides;
-  showSaveMsg('Saved — changes apply immediately.');
+  showSaveMsg('Saved — prices update on the next customer interaction.');
 }
 
 function resetPricing() {

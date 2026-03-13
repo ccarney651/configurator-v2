@@ -257,7 +257,7 @@
   <div class="qty-item">
     <div class="qty-item-img"></div>
     <div class="qty-item-info">
-      <div class="qty-item-label">Roof Window(w) x(h) (mm)</div>
+      <div class="qty-item-label">Roof Window — Small (w) x(h) (mm)</div>
       <div class="qty-item-price">£1800</div>
     </div>
     <div class="qty-controls">
@@ -269,25 +269,25 @@
   <div class="qty-item">
     <div class="qty-item-img"></div>
     <div class="qty-item-info">
-      <div class="qty-item-label">Roof Window(w) x(h) (mm)</div>
+      <div class="qty-item-label">Roof Window — Medium (w) x(h) (mm)</div>
       <div class="qty-item-price">£2000</div>
     </div>
     <div class="qty-controls">
-      <button class="qty-btn" onclick="updateItemQty('roofPorchItems','roof_window',-1)">−</button>
-      <span class="qty-val" id="qty-roof_window">0</span>
-      <button class="qty-btn" onclick="updateItemQty('roofPorchItems','roof_window',1)">+</button>
+      <button class="qty-btn" onclick="updateItemQty('roofPorchItems','roof_window_v2',-1)">−</button>
+      <span class="qty-val" id="qty-roof_window_v2">0</span>
+      <button class="qty-btn" onclick="updateItemQty('roofPorchItems','roof_window_v2',1)">+</button>
     </div>
   </div>
   <div class="qty-item">
     <div class="qty-item-img"></div>
     <div class="qty-item-info">
-      <div class="qty-item-label">Roof Window(w) x(h) (mm)</div>
+      <div class="qty-item-label">Roof Window — Large (w) x(h) (mm)</div>
       <div class="qty-item-price">£2500</div>
     </div>
     <div class="qty-controls">
-      <button class="qty-btn" onclick="updateItemQty('roofPorchItems','roof_window',-1)">−</button>
-      <span class="qty-val" id="qty-roof_window">0</span>
-      <button class="qty-btn" onclick="updateItemQty('roofPorchItems','roof_window',1)">+</button>
+      <button class="qty-btn" onclick="updateItemQty('roofPorchItems','roof_window_v3',-1)">−</button>
+      <span class="qty-val" id="qty-roof_window_v3">0</span>
+      <button class="qty-btn" onclick="updateItemQty('roofPorchItems','roof_window_v3',1)">+</button>
     </div>
   </div>
   <div class="qty-item">
@@ -3520,6 +3520,7 @@
   updatePriceDisplay();
   renderOpeningsList();
   updatePaletteUI();
+  stateHistory.push(); // capture baseline — makes the first user action undoable
 </script>
 
 </body>

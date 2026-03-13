@@ -1,9 +1,19 @@
 // Basic unit tests for pricing logic. Run with `node test/pricing.test.js`.
 
 const assert = require('assert');
+
+// Provide a minimal localStorage mock before requiring pricing.js so the
+// override test can write to it and _getPricingOverrides() will pick it up.
+const _lsMock = {};
+global.localStorage = {
+  getItem:    k   => _lsMock[k] ?? null,
+  setItem:    (k, v) => { _lsMock[k] = v; },
+  removeItem: k   => { delete _lsMock[k]; },
+};
+
 const {
   CATALOGUE,
-  PRICING_OVERRIDES,
+  getPricingOverrides,
   calcFoundation,
   calcTotal,
   calcAreaItem,
@@ -102,10 +112,15 @@ function runTests() {
   CATALOGUE.misc.test = [{ key: testKey, label: 'Override Test', rate: 100, unit: 'Each' }];
   assert.strictEqual(getRate(testKey), 100);
   assert.strictEqual(getItem(testKey).rate, 100);
-  // pretend admin override
-  PRICING_OVERRIDES[testKey] = 200;
+  // simulate admin saving an override via localStorage (as the real admin panel does)
+  const overrides = getPricingOverrides();
+  overrides[testKey] = 200;
+  localStorage.setItem('gardenroom_pricing', JSON.stringify(overrides));
   assert.strictEqual(getRate(testKey), 200);
   assert.strictEqual(getItem(testKey).rate, 200);
+  // clean up
+  delete overrides[testKey];
+  localStorage.setItem('gardenroom_pricing', JSON.stringify(overrides));
 
   console.log('Rate override behaviour verified');
 

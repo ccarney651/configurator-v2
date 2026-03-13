@@ -416,12 +416,23 @@ function setApexPitch(val) {
 // ─── URL HASH SHARE ─────────────────────────────────────────────────────────────
 
 function encodeStateToHash() {
-  try { return btoa(JSON.stringify(state)); } catch(e) { return ''; }
+  try {
+    // encodeURIComponent first ensures any non-Latin-1 chars in state values
+    // are percent-escaped before btoa, which only handles Latin-1.
+    return btoa(encodeURIComponent(JSON.stringify(state)));
+  } catch(e) { return ''; }
 }
 
 function decodeHashToState(hash) {
   try {
-    const decoded = JSON.parse(atob(hash));
+    // Support both old plain-btoa links and new encodeURIComponent links.
+    let json;
+    const raw = atob(hash);
+    // If the decoded string starts with '%', it was encodeURIComponent'd.
+    json = raw.startsWith('%') || raw.startsWith('{') === false
+      ? decodeURIComponent(raw)
+      : raw;
+    const decoded = JSON.parse(json);
     Object.keys(decoded).forEach(k => {
       if (typeof decoded[k] === 'object' && decoded[k] !== null && !Array.isArray(decoded[k])) {
         if (state[k]) Object.assign(state[k], decoded[k]);
@@ -451,15 +462,13 @@ function tryLoadFromURL() {
   return decodeHashToState(hash);
 }
 
-// ─── PALETTE / OPENING UI (kept for scene.js compatibility) ─────────────────────
+// ─── PALETTE / OPENING UI ───────────────────────────────────────────────────────
+// NOTE: setActivePalette is defined in scene.js (the real implementation).
+// Do NOT redefine it here — ui.js loads after scene.js and would shadow it.
 
 function updatePaletteUI() {
-  // Called by scene.js — sync UI to active palette
+  // Called by scene.js after palette/selection changes — keep openings list in sync.
   renderOpeningsList();
-}
-
-function setActivePalette(type) {
-  // Kept for scene.js compatibility
 }
 
 // ─── APPLY ADMIN DISABLED ITEMS ─────────────────────────────────────────────────

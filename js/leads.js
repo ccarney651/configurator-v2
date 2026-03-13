@@ -94,34 +94,69 @@ document.addEventListener('keydown', e => {
 /**
  * Opens the user's mail client with a pre-filled enquiry containing
  * the customer's details and a plain-text quote summary.
+ * Labels are derived from the CATALOGUE via getItem() so they stay in sync
+ * with pricing.js automatically.
  */
 function sendEnquiryEmail() {
   const total = calcTotal(state);
+
+  // Helper: return human-readable label for a catalogue key or a foundation key.
+  function label(key) {
+    if (!key) return 'None';
+    if (typeof FOUNDATION !== 'undefined' && FOUNDATION[key]) return FOUNDATION[key].label;
+    const item = getItem(key);
+    return item ? item.label : key;
+  }
 
   const specs = [
     `Width:       ${state.width}m`,
     `Depth:       ${state.depth}m`,
     `Height:      ${state.height}m`,
     `Floor Area:  ${(state.width * state.depth).toFixed(1)}m²`,
-    `Foundation:  ${FOUNDATION_LABELS[state.foundation] ?? state.foundation}`,
-    `Roof Style:  ${ROOF_STYLE_LABELS[state.roof] ?? state.roof}`,
-    `Roof Finish: ${ROOF_FINISH_LABELS[state.roofFinish] ?? state.roofFinish}`,
-    `Cladding:    ${CLADDING_LABELS[state.cladding] ?? state.cladding}`,
-    `Doors:       ${state.openings.filter(o=>o.type==='door').map(o=>DOOR_LABELS[o.style]??o.style).join(', ')||'None'}`,
-    `Windows:     ${state.openings.filter(o=>o.type==='window').map(o=>WINDOW_STYLE_LABELS[o.style]??o.style).join(', ')||'None'}`,
+    `Foundation:  ${label(state.foundation)}`,
+    `Roof Style:  ${state.roof === 'apex' ? 'Apex' : 'Flat'}`,
+    `Roof Finish: ${label(state.roofFinish)}`,
+    `Cladding:    ${label(state.cladding)}`,
+    `Doors:       ${state.openings.filter(o => o.type === 'door').map(o => label(o.style)).join(', ') || 'None'}`,
+    `Windows:     ${state.openings.filter(o => o.type === 'window').map(o => label(o.style)).join(', ') || 'None'}`,
+    `Int. Walls:  ${label(state.interiorWalls)}`,
+    `Int. Floor:  ${label(state.interiorFloor)}`,
+    `Guttering:   ${state.guttering && state.guttering !== 'none' ? label(state.guttering) : 'None'}`,
   ].join('\n');
 
-  const extras = Object.entries(state.extras)
-    .filter(([, on]) => on)
-    .map(([k]) => k)
-    .join(', ') || 'None';
+  // Collect all non-zero quantity items across every category
+  const qtyCategories = [
+    ['electricalItems', 'Electrics'],
+    ['bathroomItems',   'Bathroom'],
+    ['heatingItems',    'Heating'],
+    ['structuralItems', 'Structural'],
+    ['roofPorchItems',  'Roof / Porch'],
+    ['miscItems',       'Accessories'],
+  ];
 
-  const counted = [
-    state.ethernetPoints > 0 && `CAT6 Ethernet: ${state.ethernetPoints} points`,
-    state.internalLights  > 0 && `Internal lights: ${state.internalLights}`,
-    state.externalLights  > 0 && `External lights: ${state.externalLights}`,
-    state.extras.decking  && `Decking: ${state.deckingArea}m²`,
-  ].filter(Boolean).join('\n') || 'None';
+  const qtyLines = [];
+  qtyCategories.forEach(([key, title]) => {
+    if (!state[key]) return;
+    const entries = Object.entries(state[key]).filter(([, qty]) => qty > 0);
+    if (entries.length === 0) return;
+    qtyLines.push(`${title}:`);
+    entries.forEach(([itemKey, qty]) => {
+      qtyLines.push(`  ${label(itemKey)}: ${qty}`);
+    });
+  });
+
+  const extras = state.extras.decking
+    ? `Decking: ${state.deckingArea}m² (${label(state.deckingMaterial)})`
+    : 'None';
+
+  const services = [
+    state.mainsConnection      && 'Mains electric connection',
+    state.ethernetConnection   && 'Ethernet connection',
+    state.waterWasteConnection && 'Water & waste connection',
+    state.groundProtectionMats && 'Ground protection mats',
+    state.skipHire             && 'Skip hire',
+    state.groundworks          && 'Groundworks',
+  ].filter(Boolean).join(', ') || 'None';
 
   const customerBlock = leadInfo.name
     ? `CUSTOMER DETAILS\n----------------\nName:  ${leadInfo.name}\nEmail: ${leadInfo.email}${leadInfo.phone ? '\nPhone: ' + leadInfo.phone : ''}${leadInfo.notes ? '\nNotes: ' + leadInfo.notes : ''}\n\n`
@@ -134,9 +169,10 @@ function sendEnquiryEmail() {
     '',
     'EXTRAS & ADD-ONS',
     '----------------',
-    'Toggles: ' + extras,
-    counted,
+    'Decking: ' + extras,
+    'Services: ' + services,
     '',
+    ...(qtyLines.length > 0 ? ['QUANTITY ITEMS', '--------------', ...qtyLines, ''] : []),
     'ESTIMATE TOTAL (exc. VAT)',
     '-------------------------',
     `£${Math.round(total).toLocaleString('en-GB')}`,

@@ -159,7 +159,8 @@ const state = {
   },
 
   roofPorchItems: {
-    roof_window: 0, pergola: 0, trellis_canopy: 0,
+    roof_window: 0, roof_window_v2: 0, roof_window_v3: 0,
+    pergola: 0, trellis_canopy: 0,
     canopy_roof_overhang: 0, veranda: 0,
   },
 
